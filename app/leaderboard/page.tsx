@@ -29,7 +29,7 @@ export default function LeaderboardPage() {
       .select("*")
       .then(({ data, error: err }) => {
         if (err) setError(err.message);
-        else setRows((data as Row[]) ?? []);
+        else setRows((data as unknown as Row[]) ?? []);
       });
   }, [configured]);
 

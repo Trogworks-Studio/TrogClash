@@ -100,7 +100,7 @@ export function useProfile(): UseProfileResult {
         .from("profiles")
         .select("*")
         .eq("id", userId)
-        .maybeSingle()) as { data: ProfileRow | null };
+        .maybeSingle()) as unknown as { data: ProfileRow | null };
 
       if (existing) {
         if (!cancelled) {
@@ -118,7 +118,7 @@ export function useProfile(): UseProfileResult {
           .from("profiles")
           .insert({ id: userId, username })
           .select()
-          .maybeSingle()) as { data: ProfileRow | null };
+          .maybeSingle()) as unknown as { data: ProfileRow | null };
         if (!cancelled && created) {
           setProfile({
             username: created.username,
