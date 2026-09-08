@@ -1,6 +1,16 @@
 import { createGame, playCard, attackWithMinion, useHeroPower, endTurn } from "../lib/game/engine";
 import { runBotTurn } from "../lib/game/bot";
 import { applyMatchResult } from "../lib/game/rank";
+import { GamePhase } from "../lib/types";
+
+// TS narrows `state.phase` from the outer `while` condition and doesn't know
+// that the imported engine functions mutate it by reference, so it treats
+// later `=== "gameOver"` checks as unreachable. This helper reads the phase
+// through a real function call, which returns the full `GamePhase` union
+// instead of the (stale) narrowed literal type.
+function currentPhase(state: ReturnType<typeof createGame>): GamePhase {
+  return state.phase;
+}
 
 function playRandomPlayerTurn(state: ReturnType<typeof createGame>) {
   // Player plays whatever it can afford, greedily, then attacks face with anything available, then ends turn.
@@ -53,10 +63,10 @@ for (let game = 0; game < 25; game++) {
   let turns = 0;
   while (state.phase !== "gameOver" && turns < MAX_TURNS) {
     playRandomPlayerTurn(state);
-    if (state.phase === "gameOver") break;
+    if (currentPhase(state) === "gameOver") break;
     endTurn(state); // -> botTurn
     runBotTurn(state);
-    if (state.phase === "gameOver") break;
+    if (currentPhase(state) === "gameOver") break;
     endTurn(state); // -> back to playerTurn, new turnNumber
     turns++;
   }

@@ -45,7 +45,11 @@ export default function GameBoard({ onGameOver }: Props) {
     const timer = setTimeout(() => {
       setState((prev) => {
         if (prev.phase !== "botTurn") return prev;
-        const draft = structuredClone(prev);
+        // Explicit annotation on purpose: without it, `draft`'s inferred type
+        // inherits the narrowed `phase: "botTurn"` literal from `prev` above,
+        // and TS then treats `runBotTurn` mutating `draft.phase` as
+        // impossible, flagging the check below as an unreachable comparison.
+        const draft: GameState = structuredClone(prev);
         runBotTurn(draft);
         if (draft.phase !== "gameOver") {
           endTurn(draft);
