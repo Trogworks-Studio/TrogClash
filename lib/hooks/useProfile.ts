@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { getSupabaseClient, isSupabaseConfigured, ProfileRow } from "@/lib/supabase/client";
 import { applyMatchResult, RankRecord } from "@/lib/game/rank";
 
 const GUEST_KEY = "trogworks-guest-profile";
@@ -96,7 +96,11 @@ export function useProfile(): UseProfileResult {
         userId = data.user.id;
       }
 
-      const { data: existing } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+      const { data: existing } = (await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .maybeSingle()) as { data: ProfileRow | null };
 
       if (existing) {
         if (!cancelled) {
@@ -110,11 +114,11 @@ export function useProfile(): UseProfileResult {
         }
       } else {
         const username = `Trog${Math.floor(1000 + Math.random() * 9000)}`;
-        const { data: created } = await supabase
+        const { data: created } = (await supabase
           .from("profiles")
           .insert({ id: userId, username })
           .select()
-          .maybeSingle();
+          .maybeSingle()) as { data: ProfileRow | null };
         if (!cancelled && created) {
           setProfile({
             username: created.username,
