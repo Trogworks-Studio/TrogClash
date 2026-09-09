@@ -7,6 +7,7 @@ import { titleForLevel } from "@/lib/game/rank";
 import { useProfile } from "@/lib/hooks/useProfile";
 import { Icon } from "@/components/icons";
 import { PORTRAITS } from "@/lib/game/art";
+import SoundToggle from "@/components/SoundToggle";
 
 interface Row {
   username: string;
@@ -36,19 +37,20 @@ export default function LeaderboardPage() {
   }, [configured]);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-lg flex-col gap-4 px-4 py-8">
-      <div className="flex items-center justify-between">
+    <main className="mx-auto flex h-[100dvh] max-w-lg flex-col gap-3 overflow-hidden px-4 py-4 sm:gap-4 sm:py-6">
+      <div className="flex flex-shrink-0 items-center justify-between">
         <Link href="/" className="font-display text-xs font-bold text-goblin-gold hover:underline">
           ← Menü
         </Link>
-        <h1 className="flex items-center justify-center gap-2 font-display text-xl font-extrabold text-parchment-100">
+        <h1 className="flex items-center justify-center gap-2 font-display text-lg font-extrabold text-parchment-100 sm:text-xl">
           <Icon.Trophy className="h-5 w-5 text-goblin-gold" />
           Skor Tablosu
         </h1>
-        <span className="w-10" />
+        <SoundToggle />
       </div>
 
-      {!configured && (
+      <div className="scrollbar-thin min-h-0 flex-1 overflow-y-auto pr-0.5">
+        {!configured && (
         <div className="rounded-2xl border-2 border-swamp-700 bg-swamp-900/80 p-4 text-sm text-parchment-200">
           <p className="mb-2">
             Genel skor tablosu için Supabase henüz bağlanmamış. <code className="text-goblin-gold">.env.local</code>{" "}
@@ -119,6 +121,7 @@ export default function LeaderboardPage() {
           </table>
         </div>
       )}
+      </div>
     </main>
   );
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 px-4 py-10 text-center">
+    <main className="flex h-[100dvh] flex-col items-center justify-center gap-4 overflow-hidden px-4 py-10 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element -- local static art */}
       <img src="/art/office-employee.png" alt="" className="h-40 w-40 object-contain" draggable={false} />
       <h1 className="font-display text-2xl font-extrabold text-parchment-100">Bu sayfa bataklığa gömülmüş</h1>

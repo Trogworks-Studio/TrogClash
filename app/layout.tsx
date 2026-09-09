@@ -14,12 +14,17 @@ export const metadata: Metadata = {
 
 export const viewport = {
   themeColor: "#0E1A16",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="h-[100dvh] overflow-hidden overscroll-none antialiased">{children}</body>
     </html>
   );
 }

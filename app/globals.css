@@ -7,14 +7,33 @@
 :root {
   --font-display: "Baloo 2", system-ui, sans-serif;
   --font-body: "Nunito", system-ui, sans-serif;
+
+  /* Fluid card-game sizing — driven by whichever of width/height is
+     tighter, so cards shrink together on short landscape phones AND
+     narrow portrait phones without ever needing the page to scroll. */
+  --hero-d: clamp(52px, min(13vw, 12vh), 92px);
+  --mana-d: clamp(34px, min(8.5vw, 7.5vh), 56px);
+  --hand-card-w: clamp(82px, min(20vw, 17vh), 184px);
+  --board-card-w: clamp(72px, min(17vw, 14.5vh), 132px);
 }
 
 html,
 body {
   height: 100%;
+  overscroll-behavior: none;
+}
+
+/* The whole app is viewport-locked: no page-level scrollbar, ever.
+   Individual strips (hand row, leaderboard table) may still scroll
+   *internally* as a safety net for edge cases (e.g. a 10-card hand),
+   but the outer frame never grows past the screen. */
+html {
+  overflow: hidden;
 }
 
 body {
+  height: 100dvh;
+  overflow: hidden;
   background-color: #0e1a16;
   background-image:
     radial-gradient(circle at 15% 0%, rgba(122, 74, 155, 0.14), transparent 42%),
@@ -51,6 +70,19 @@ body {
 }
 .scrollbar-thin::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* collapse secondary copy on very short viewports (landscape phones)
+   so the primary interactive content always fits without scrolling */
+@media (max-height: 700px) {
+  .vh-compact-hide {
+    display: none !important;
+  }
+}
+@media (max-height: 560px) {
+  .vh-tiny-hide {
+    display: none !important;
+  }
 }
 
 @keyframes float-slow {
@@ -103,4 +135,93 @@ body {
 }
 .animate-shake {
   animation: shake 0.35s ease-in-out;
+}
+
+/* attacker lunges toward its target and snaps back — driven by a CSS
+   var so the same keyframe works for board minions attacking in
+   either direction (player board attacks upward, bot board downward) */
+@keyframes attack-lunge {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    transform: translateY(var(--lunge-y, -18px)) scale(1.08);
+  }
+}
+.animate-attack-lunge {
+  animation: attack-lunge 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* hero portrait recoils when it takes damage */
+@keyframes hero-hit {
+  0% {
+    transform: translateX(0) rotate(0);
+  }
+  25% {
+    transform: translateX(-6px) rotate(-3deg);
+  }
+  50% {
+    transform: translateX(5px) rotate(2deg);
+  }
+  75% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+.animate-hero-hit {
+  animation: hero-hit 0.4s ease-in-out;
+}
+
+/* turn banner sweeps in from both sides */
+@keyframes turn-sweep {
+  0% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scaleX(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+.animate-turn-sweep {
+  animation: turn-sweep 0.35s ease-out both;
+  transform-origin: center;
+}
+
+/* soft ambient pulse for the mana-usable glow / legendary auras */
+@keyframes aura-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+.animate-aura-pulse {
+  animation: aura-pulse 2.2s ease-in-out infinite;
+}
+
+/* card played from hand: quick forward tilt + fade as it commits to the board */
+@keyframes card-commit {
+  0% {
+    transform: translateY(0) scale(1) rotateX(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-40px) scale(0.6) rotateX(35deg);
+    opacity: 0;
+  }
+}
+.animate-card-commit {
+  animation: card-commit 0.32s ease-in both;
 }

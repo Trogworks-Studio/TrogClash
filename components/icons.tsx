@@ -104,6 +104,22 @@ export function ScrollIcon({ className }: IconProps) {
   );
 }
 
+export function SpeakerIcon({ className }: IconProps) {
+  return (
+    <Base className={className}>
+      <path d="M4 9v6h4l5 5V4L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Zm-2.5-8.9v2.06c3 .84 5 3.53 5 6.84s-2 6-5 6.84v2.06c4-.87 7-4.44 7-8.9s-3-8.03-7-8.9Z" />
+    </Base>
+  );
+}
+
+export function SpeakerMuteIcon({ className }: IconProps) {
+  return (
+    <Base className={className}>
+      <path d="M4 9v6h4l5 5V4L8 9H4Zm14.3-1.7-1.4 1.4 2.3 2.3-2.3 2.3 1.4 1.4 2.3-2.3 2.3 2.3 1.4-1.4-2.3-2.3 2.3-2.3-1.4-1.4-2.3 2.3-2.3-2.3Z" />
+    </Base>
+  );
+}
+
 export const Icon = {
   Trophy: TrophyIcon,
   Swords: SwordsIcon,
@@ -114,4 +130,6 @@ export const Icon = {
   Coin: CoinIcon,
   Chest: ChestIcon,
   Scroll: ScrollIcon,
+  Speaker: SpeakerIcon,
+  SpeakerMute: SpeakerMuteIcon,
 };
