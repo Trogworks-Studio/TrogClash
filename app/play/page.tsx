@@ -5,6 +5,7 @@ import { useState } from "react";
 import GameBoard from "@/components/GameBoard";
 import { useProfile } from "@/lib/hooks/useProfile";
 import { XP_PER_LOSS, XP_PER_WIN } from "@/lib/game/rank";
+import { PORTRAITS } from "@/lib/game/art";
 
 export default function PlayPage() {
   const profile = useProfile();
@@ -22,7 +23,7 @@ export default function PlayPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-3 px-3 py-4">
+    <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-3 px-3 py-4 lg:max-w-4xl xl:max-w-5xl">
       <div className="flex items-center justify-between">
         <Link href="/" className="font-display text-xs font-bold text-goblin-gold hover:underline">
           ← Menü
@@ -37,9 +38,17 @@ export default function PlayPage() {
 
         {result && (
           <div className="absolute inset-0 flex items-center justify-center rounded-3xl bg-swamp-950/85 backdrop-blur-sm">
-            <div className="animate-pop-in flex flex-col items-center gap-3 rounded-2xl border-4 border-goblin-gold bg-swamp-900 p-8 text-center shadow-panel">
-              <span className="text-5xl">{result === "win" ? "🏆" : "💀"}</span>
-              <h2 className="font-display text-2xl font-extrabold text-parchment-100">
+            <div className="animate-pop-in flex flex-col items-center gap-3 rounded-[28px] border-[6px] border-goblin-gold bg-gradient-to-b from-swamp-800 to-swamp-950 p-9 text-center shadow-glow-legendary">
+              <div className="h-32 w-32 overflow-hidden rounded-full border-[5px] border-goblin-gold bg-swamp-800 shadow-card-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element -- local static art */}
+                <img
+                  src={result === "win" ? PORTRAITS.victory : PORTRAITS.defeat}
+                  alt=""
+                  className="h-full w-full object-cover object-top"
+                  draggable={false}
+                />
+              </div>
+              <h2 className="font-display text-3xl font-extrabold text-parchment-100">
                 {result === "win" ? "Kazandın!" : "Kaybettin"}
               </h2>
               <p
@@ -54,13 +63,13 @@ export default function PlayPage() {
                 <button
                   type="button"
                   onClick={playAgain}
-                  className="rounded-full border-2 border-swamp-950 bg-ember-600 px-6 py-2 font-display text-sm font-bold text-white shadow-card transition-transform hover:scale-105"
+                  className="rounded-full border-[3px] border-swamp-950 bg-gradient-to-b from-ember-500 to-ember-600 px-7 py-2.5 font-display text-sm font-bold text-white shadow-card-lg transition-transform hover:scale-105"
                 >
                   Tekrar Oyna
                 </button>
                 <Link
                   href="/"
-                  className="rounded-full border-2 border-swamp-950 bg-swamp-800 px-6 py-2 font-display text-sm font-bold text-parchment-100 shadow-card transition-transform hover:scale-105"
+                  className="rounded-full border-[3px] border-swamp-950 bg-swamp-800 px-7 py-2.5 font-display text-sm font-bold text-parchment-100 shadow-card-lg transition-transform hover:scale-105"
                 >
                   Menü
                 </Link>

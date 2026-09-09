@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { titleForLevel } from "@/lib/game/rank";
 import { useProfile } from "@/lib/hooks/useProfile";
+import { Icon } from "@/components/icons";
+import { PORTRAITS } from "@/lib/game/art";
 
 interface Row {
   username: string;
@@ -39,7 +41,10 @@ export default function LeaderboardPage() {
         <Link href="/" className="font-display text-xs font-bold text-goblin-gold hover:underline">
           ← Menü
         </Link>
-        <h1 className="font-display text-xl font-extrabold text-parchment-100">🏆 Skor Tablosu</h1>
+        <h1 className="flex items-center justify-center gap-2 font-display text-xl font-extrabold text-parchment-100">
+          <Icon.Trophy className="h-5 w-5 text-goblin-gold" />
+          Skor Tablosu
+        </h1>
         <span className="w-10" />
       </div>
 
@@ -50,12 +55,16 @@ export default function LeaderboardPage() {
             dosyasına proje anahtarlarını ekleyip <code className="text-goblin-gold">supabase/schema.sql</code>{" "}
             dosyasını çalıştırınca burada tüm oyuncular görünecek.
           </p>
-          <div className="mt-3 rounded-xl bg-swamp-950/70 p-3">
-            <p className="font-display text-sm font-bold text-parchment-100">Senin ilerlemen (bu tarayıcıda)</p>
-            <p className="mt-1 text-xs text-parchment-300">
-              {profile.username} — Sv.{profile.level} ({titleForLevel(profile.level)}) · {profile.wins}G/
-              {profile.losses}K
-            </p>
+          <div className="mt-3 flex items-center gap-3 rounded-xl bg-swamp-950/70 p-3">
+            {/* eslint-disable-next-line @next/next/no-img-element -- local static art */}
+            <img src={PORTRAITS.laptop} alt="" className="h-14 w-14 flex-shrink-0 object-contain" draggable={false} />
+            <div>
+              <p className="font-display text-sm font-bold text-parchment-100">Senin ilerlemen (bu tarayıcıda)</p>
+              <p className="mt-1 text-xs text-parchment-300">
+                {profile.username} — Sv.{profile.level} ({titleForLevel(profile.level)}) · {profile.wins}G/
+                {profile.losses}K
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -87,8 +96,12 @@ export default function LeaderboardPage() {
               )}
               {rows?.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-3 py-4 text-center text-parchment-300/70">
-                    Henüz kimse maç oynamamış — ilk sen ol!
+                  <td colSpan={4} className="px-3 py-5 text-center text-parchment-300/70">
+                    <div className="flex flex-col items-center gap-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- local static art */}
+                      <img src={PORTRAITS.scouting} alt="" className="h-16 w-16 object-contain" draggable={false} />
+                      <span>Henüz kimse maç oynamamış — ilk sen ol!</span>
+                    </div>
                   </td>
                 </tr>
               )}

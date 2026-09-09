@@ -1,9 +1,12 @@
 import { GoblinVariant, Rarity } from "@/lib/types";
+import { artForCard } from "@/lib/game/art";
 
 interface Props {
   variant: GoblinVariant;
   rarity: Rarity;
   className?: string;
+  /** Specific card id, e.g. "gobo-tamirci" — used to look up commissioned art before falling back to variant/procedural. */
+  cardId?: string;
 }
 
 const SKIN: Record<GoblinVariant, { base: string; shade: string }> = {
@@ -26,7 +29,23 @@ const RARITY_GLOW: Record<Rarity, string> = {
   legendary: "0 0 16px rgba(255,190,60,0.7)",
 };
 
-export default function GoblinIllustration({ variant, rarity, className }: Props) {
+export default function GoblinIllustration({ variant, rarity, className, cardId }: Props) {
+  const art = cardId ? artForCard(cardId, variant) : undefined;
+
+  if (art) {
+    return (
+      <div
+        className={className}
+        style={{
+          filter: RARITY_GLOW[rarity] !== "none" ? `drop-shadow(${RARITY_GLOW[rarity]})` : undefined,
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- local static art, plain <img> avoids next/image sizing ceremony for many small circular crops */}
+        <img src={art} alt="" className="h-full w-full object-cover object-top" draggable={false} />
+      </div>
+    );
+  }
+
   const skin = SKIN[variant];
 
   return (
